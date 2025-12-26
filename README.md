@@ -90,11 +90,11 @@ This repository contains the structure and artifacts needed for the following de
 
 ---
 
-## Status
+## Project Status
 
-- Typology definitions locked
-- County-wide scope locked
-- Outputs and tables will be added as processing is completed (no placeholder results)
+**Analysis complete.**  
+A detailed summary of methods, results, and outputs is documented in [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
+
 
 ---
 
