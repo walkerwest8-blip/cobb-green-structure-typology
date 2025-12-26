@@ -1,5 +1,5 @@
 # Cobb County Green Structure Typology (Georgia, USA)
-
+🔗 Portfolio hub: https://walkerwest8-blip.github.io
 A county-wide spatial analysis in **QGIS** that classifies “green space” by **spatial structure** (patch size, shape, connectivity, fragmentation) rather than spectral greenness. The goal is interpretability and reproducibility under real-world public-data constraints.
 
 **Study area:** Cobb County, Georgia (county-wide only)  
