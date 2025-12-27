@@ -1,105 +1,133 @@
-# Cobb County Green Structure Typology (Georgia, USA)
-
+# Cobb County Green Structure Typology
 🔗 Portfolio hub: https://walkerwest8-blip.github.io
+## Overview
+This project develops a **structural typology of green space** for Cobb County, Georgia using QGIS and publicly available land cover data. Rather than relying on vegetation indices (e.g., NDVI), the analysis focuses on **spatial structure**—patch size, shape, and linearity—to understand how green space is organized and connected across a suburban landscape.
 
-A county-wide spatial analysis in **QGIS** that classifies “green space” by **spatial structure** (patch size, shape, connectivity, fragmentation) rather than spectral greenness. The goal is interpretability and reproducibility under real-world public-data constraints.
-
-**Study area:** Cobb County, Georgia (county-wide only)  
-**CRS:** EPSG:2240 — NAD83 / Georgia West (US survey feet)  
-**Area units:** Acres  
-**Software:** QGIS only (no proprietary extensions)
+The result is a reproducible, county-wide classification that highlights the dominance of **linear corridors** over compact green cores.
 
 ---
 
-## Project Question
-
-**Core research question:**  
-Where does green space in Cobb County represent structurally complex, ecologically meaningful vegetation versus human-maintained or residual green cover?
-
-This project treats “greenness” as context-dependent. It avoids over-claiming ecological outcomes and instead focuses on **spatial indicators** that are legible, auditable, and mappable.
-
----
-
-## Methodological Philosophy
-
-- Emphasizes **spatial structure** over spectral indices
-- Treats “green” as ambiguous: the same land cover can represent different ecological roles depending on configuration
-- Uses **patch size, shape, fragmentation, and connectivity** as interpretable indicators
-- Avoids causal claims about habitat quality or biodiversity
-- Prioritizes reproducibility: decisions are documented and outputs are traceable
+## Study Area
+- **Location:** Cobb County, Georgia (USA)
+- **Extent:** County-wide
+- **Coordinate Reference System:**  
+  NAD83 / Georgia West (EPSG:2240, US survey feet)
 
 ---
 
-## Green Structure Typology (Locked)
+## Data Sources
+All data used in this project are publicly available:
 
-1. **Core Patches** — large contiguous green areas  
-2. **Edge Patches** — medium patches with high edge-to-area ratios  
-3. **Corridors** — linear green features (riparian buffers, greenways, ROWs)  
-4. **Stepping Stones** — small isolated patches  
-5. **Residual Green** — very small or thin green fragments  
+- **NLCD 2023 Land Cover**  
+  Multi-Resolution Land Characteristics (MRLC)
+- **County Boundaries**  
+  U.S. Census Bureau TIGER/Line
 
----
-
-## Data Sources (Public)
-
-- U.S. Census **TIGER/Line** (county boundaries)
-- **NLCD 2021 Land Cover** (MRLC)
-- USGS / public hydrography (where relevant for interpreting corridors)
-
-See `data/raw/README.md` for source notes and handling constraints.
+Raw national datasets are not included in this repository to keep it lightweight and reproducible.
 
 ---
 
-## Deliverables (No invented results)
+## Method Summary
+1. NLCD land cover was clipped to the Cobb County boundary.
+2. Vegetated land cover classes (forest, shrub, grassland, pasture/hay, wetlands) were selected to create a binary green mask.
+3. Green areas were polygonized into individual patches.
+4. Patch area (acres) and shape metrics were calculated.
+5. Patches were classified using an **area-based typology**:
+   - Residual (< 1 acre)
+   - Stepping Stone (1–5 acres)
+   - Edge Patch (5–40 acres)
+   - Core Patch (> 40 acres)
+6. A compactness-based shape index was used to identify **corridor features**.
+7. Corridors override area-based classes in the final typology.
+8. Large corridors (> 40 acres) were flagged as **core-but-linear** features for interpretation.
 
-This repository contains the structure and artifacts needed for the following deliverables:
+## Methods Diagram
 
-- Green vs Non-Green mask
-- Green Structure Typology map
-- Summary tables (acres and percent)
-- Short written report (DOCX → PDF)
-- Portfolio-ready figures
+The workflow follows a linear, reproducible sequence from raw land cover data to final structural classification:
+NLCD 2023 Land Cover (CONUS)
+            │
+            ▼
+Clip to Cobb County Boundary
+            │
+            ▼
+Select Vegetated Classes
+(Forest, Shrub, Grassland, Pasture/Hay, Wetlands)
+            │
+            ▼
+Binary Green Mask Raster
+(1 = Green, 0 = Non-Green)
+            │
+            ▼
+Raster → Vector Polygonization
+            │
+            ▼
+Green Patches (Vector)
+            │
+            ├── Calculate Area (acres)
+            │
+            ├── Calculate Shape Metric (Compactness Index)
+            │
+            ▼
+Area-Based Patch Typology
+(Residual / Stepping Stone / Edge / Core)
+            │
+            ▼
+Shape-Based Corridor Detection
+(Corridor Overrides Area Classes)
+            │
+            ▼
+Final Green Structure Typology
+(Corridor, Edge Patch, Stepping Stone, Residual)
 
 ---
 
-## Repository Organization
+## Final Structural Classes
+- **Corridor**
+- **Edge Patch**
+- **Stepping Stone**
+- **Residual Green**
 
-- `qgis/` — QGIS project file(s), styles, and model artifacts supporting reproducibility  
-- `data/`  
-  - `raw/` — intentionally empty (documented); raw inputs stored locally  
-  - `interim/` — scratch outputs used during processing (optional)  
-  - `processed/` — selected processed layers used to generate figures/tables  
-- `outputs/` — exported maps and final tables intended for viewing/sharing  
-- `docs/` — report (DOCX/PDF) and figure set for portfolio presentation  
+No compact core patches were identified after accounting for corridor geometry.
+
+---
+
+## Key Findings
+- Green space in Cobb County is **highly fragmented** by count, with thousands of small residual patches.
+- The majority of total green area is contained within **elongated corridor features**, not compact blocks.
+- Twelve large, linear features exceed the core size threshold (>40 acres) but remain structurally corridor-like.
+- Connectivity in the county is therefore maintained primarily through **riparian systems and linear greenways**, rather than intact core reserves.
+
+---
+
+## Repository Contents
+
+### Maps
+- `maps/Cobb_GreenStructure_Typology.png`  
+- `maps/Cobb_GreenStructure_Typology.pdf`
+
+### Tables
+- `tables/green_structure_by_class.csv`  
+  Summary of patch counts and total area by structural class.
+- `tables/core_linear_summary.csv`  
+  Summary of large corridor features functioning as de facto cores.
+
+### QGIS Project
+- `qgis/Cobb_GreenStructure.qgz`  
+  Preserves full workflow context, symbology, and analytical fields.
 
 ---
 
 ## Limitations
-
-- **Land cover generalization:** NLCD is categorical and resolution-limited; small features and mixed pixels can blur patch boundaries.  
-- **Structure ≠ ecology:** patch geometry and connectivity are proxies and do not directly measure habitat quality, biodiversity, or ecological function.  
-- **Edge definition sensitivity:** results depend on threshold choices (e.g., minimum patch size, corridor width criteria, edge-to-area cutoffs).  
-- **Temporal mismatch:** datasets may not align perfectly in time; interpretation is descriptive rather than causal.
+- Structural classification does not directly measure ecological quality or habitat value.
+- Results are dependent on NLCD thematic resolution and classification accuracy.
+- Corridors are identified using geometric criteria only, without network or flow modeling.
 
 ---
 
-## Future Improvements (Constrained and honest)
-
-- Parameter sensitivity checks (how typology shifts across thresholds)
-- Optional comparative layer: NDVI **only** as a secondary reference (not a primary classifier)
-- Incorporate additional public layers for interpretive context (e.g., parks, zoning, protected areas) without changing core typology logic
-- Add a reproducible QGIS Model Builder pipeline for the full typology workflow
-
----
-
-## Project Status
-
-**Analysis complete.**  
-A detailed summary of methods, results, and outputs is documented in [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
-
+## Author
+Analysis and cartography by **[Your Name]**
 
 ---
 
 ## License
-
-Add an explicit license before sharing broadly (see `LICENSE`).
+This project is intended for educational and portfolio use. Data sources retain their original licenses.
