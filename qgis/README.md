@@ -1,0 +1,1 @@
+The QGIS project file preserves layer structure, symbology, and analytical fields. Raw national datasets are excluded to keep the repository lightweight; all data sources are publicly available and documented.
