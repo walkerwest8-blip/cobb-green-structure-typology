@@ -1,1 +1,1 @@
-
+Final green structure typology map for Cobb County, Georgia. Green space is classified using a patch- and corridor-based structural model derived from NLCD 2023 land cover data. Corridors dominate total green area, indicating that connectivity is primarily maintained through linear systems rather than compact core patches.
