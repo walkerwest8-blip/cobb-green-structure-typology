@@ -41,44 +41,6 @@ Raw national datasets are not included in this repository to keep it lightweight
 7. Corridors override area-based classes in the final typology.
 8. Large corridors (> 40 acres) were flagged as **core-but-linear** features for interpretation.
 
-## Methods Diagram
-
-The workflow follows a linear, reproducible sequence from raw land cover data to final structural classification:
-NLCD 2023 Land Cover (CONUS)
-            │
-            ▼
-Clip to Cobb County Boundary
-            │
-            ▼
-Select Vegetated Classes
-(Forest, Shrub, Grassland, Pasture/Hay, Wetlands)
-            │
-            ▼
-Binary Green Mask Raster
-(1 = Green, 0 = Non-Green)
-            │
-            ▼
-Raster → Vector Polygonization
-            │
-            ▼
-Green Patches (Vector)
-            │
-            ├── Calculate Area (acres)
-            │
-            ├── Calculate Shape Metric (Compactness Index)
-            │
-            ▼
-Area-Based Patch Typology
-(Residual / Stepping Stone / Edge / Core)
-            │
-            ▼
-Shape-Based Corridor Detection
-(Corridor Overrides Area Classes)
-            │
-            ▼
-Final Green Structure Typology
-(Corridor, Edge Patch, Stepping Stone, Residual)
-
 ---
 
 ## Final Structural Classes
